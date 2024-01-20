@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscador de contenido en YouTube</title>
+    <style>
+        /* silicon v1.2.5 */
+        @import url(https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap);
+
+        form,
+        nav {
+            justify-content: center;
+            display: flex
+        }
+
+        *,
+        button,
+        input,
+        select,
+        textarea {
+            box-sizing: border-box;
+            color: var(--color-text)
+        }
+
+        caption,
+        td,
+        th {
+            text-align: left
+        }
+
+        button:disabled,
+        button[type=reset],
+        input:disabled,
+        tr:hover :not(th) {
+            background-color: var(--color-grey)
+        }
+
+        a,
+        del,
+        ins,
+        s,
+        u {
+            text-decoration-thickness: var(--border-width)
+        }
+
+        *,
+        button[type=reset],
+        code,
+        kbd,
+        samp {
+            color: var(--color-text)
+        }
+
+        blockquote footer,
+        button:disabled,
+        input:disabled {
+            color: var(--color-darker-grey)
+        }
+
+        .flex,
+        form,
+        nav {
+            display: flex
+        }
+
+        :root {
+            --color-primary: #2c62af;
+            --color-secondary-dark: #263342;
+            --color-secondary: #cfdef3;
+            --color-tertiary: #edf2f6;
+            --color-background: #fff;
+            --color-text: #0c0c0c;
+            --color-border: #0c0c0c;
+            --color-grey: #f1f1f1;
+            --color-dark-grey: #ababab;
+            --color-darker-grey: #818181;
+            --color-green: #cbf5c4;
+            --color-red: #f8b8b8;
+            --color-yellow: #f8efb8;
+            --offset-text-color: #f1f1f1;
+            --font-size: 1.07rem;
+            --gap: 15px;
+            --border-width: 2px
+        }
+
+        * {
+            font-family: Outfit, sans-serif, system-ui
+        }
+
+        html {
+            background-color: var(--color-background)
+        }
+
+        body {
+            width: 800px;
+            max-width: 95%;
+            margin: auto
+        }
+
+        .wide,
+        form,
+        form * {
+            width: 100%
+        }
+
+        h1 {
+            font-size: 3em
+        }
+
+        h2 {
+            font-size: 2.2em
+        }
+
+        caption,
+        h3 {
+            font-size: 1.7em
+        }
+
+        h4 {
+            font-size: 1.5em
+        }
+
+        h5 {
+            font-size: 1.3em
+        }
+
+        h6 {
+            font-size: 1.2em
+        }
+
+        a {
+            font-weight: 600;
+            color: var(--color-primary)
+        }
+
+        nav {
+            align-items: center;
+            gap: 3rem
+        }
+
+        .flex,
+        div.grid.gap,
+        form {
+            gap: var(--gap)
+        }
+
+        footer {
+            margin: 3rem 0
+        }
+
+        form {
+            align-items: center;
+            flex-flow: column;
+            margin: 2rem 0
+        }
+
+        label {
+            padding-bottom: 4px;
+            font-size: var(--font-size)
+        }
+
+        button,
+        input:not([type="checkbox"]),
+        select,
+        textarea {
+            appearance: none;
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            width: 100%;
+            padding: .8em;
+            border-radius: 4px;
+            background: 0 0;
+            border: var(--border-width) solid var(--color-text);
+            outline: 0;
+            font-family: Outfit, sans-serif;
+            font-size: var(--font-size);
+            caret-color: var(--color-primary)
+        }
+
+        code,
+        kbd,
+        samp,
+        var {
+            font-family: 'JetBrains Mono', monospace
+        }
+
+        button,
+        input[type=submit] {
+            background-color: var(--color-primary);
+            font-weight: 600;
+            border: none;
+            color: var(--offset-text-color);
+            cursor: pointer;
+            padding: .4rem 1.2rem
+        }
+
+        ::-moz-selection,
+        ::selection {
+            background-color: var(--color-primary);
+            color: var(--color-background);
+            border-radius: 4px
+        }
+
+        button {
+            width: initial;
+            margin: 0 4px
+        }
+
+        button:disabled,
+        input:disabled {
+            font-weight: 500;
+            border: var(--border-width) dashed var(--color-darker-grey)
+        }
+
+        button:disabled {
+            padding: calc(.4rem - var(--border-width)) calc(1.2rem - var(--border-width))
+        }
+
+        button:disabled:hover,
+        input:disabled:hover {
+            cursor: not-allowed
+        }
+
+        button:active,
+        input[type=submit]:active {
+            transform: translateY(1px)
+        }
+
+        button:disabled:active {
+            transform: none
+        }
+
+        input[type=color] {
+            padding: 14px 4px;
+            appearance: none;
+            -moz-appearance: none;
+            -webkit-appearance: none
+        }
+
+
+        input[type=file] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            border: var(--border-width) solid var(--color-text);
+            padding: 6px
+        }
+
+        details,
+        input[type=file]:hover {
+            cursor: pointer
+        }
+
+        ::file-selector-button {
+            border: var(--border-width) solid var(--color-text);
+            background: 0 0;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-family: Outfit, system-ui, sans-serif;
+            margin-right: 10px;
+            color: var(--color-text);
+            font-size: var(--font-size)
+        }
+
+        ::-webkit-file-upload-button {
+            border: var(--border-width) solid var(--color-text);
+            background: 0 0;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-family: Outfit, system-ui, sans-serif;
+            margin-right: 10px;
+            color: var(--color-text);
+            font-size: var(--font-size)
+        }
+
+        select {
+            appearance: none;
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" fill="none" viewBox="0 0 24 24"><path stroke="%230c0c0c" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 11-3 3-3-3"/></svg>');
+            background-position: calc(100% - .4em) calc(50% + 1px);
+            background-repeat: no-repeat;
+            background-size: 24px 24px
+        }
+
+        input::-webkit-inner-spin-button,
+        input::-webkit-outer-spin-button {
+            appearance: none;
+            -moz-appearance: none;
+            -webkit-appearance: none
+        }
+
+        input[type=checkbox] {
+            margin: 6px;
+        }
+
+        code,
+        del,
+        img,
+        ins,
+        kbd,
+        mark,
+        samp,
+        tr {
+            border-radius: 4px
+        }
+
+        img,
+        svg {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        input[type=checkbox]:checked:after,
+        input[type=radio]:checked:after {
+            width: 6px;
+            height: 6px;
+            background-color: var(--color-text);
+            border-width: 0 var(--border-width) var(--border-width) 0;
+            position: relative;
+            transform: translate(-3px, -3px);
+            border-radius: 2px
+        }
+
+        input[type=radio],
+        input[type=radio]:before,
+        input[type=radio]:checked:after {
+            border-radius: 20px
+        }
+
+        ::placeholder {
+            opacity: 100%;
+            color: var(--color-darker-grey)
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%
+        }
+
+        caption {
+            margin-bottom: 1rem;
+            font-weight: 600
+        }
+
+        samp,
+        var {
+            font-weight: 800
+        }
+
+        td,
+        th {
+            padding: .4em
+        }
+
+        th {
+            border-bottom: var(--border-width) solid var(--color-text);
+            font-size: 1.2em
+        }
+
+        code,
+        samp {
+            padding: .2em .4em;
+            background-color: var(--color-secondary);
+            font-size: .8rem;
+            tab-size: 4;
+            unicode-bidi: embed;
+            white-space: pre-wrap
+        }
+
+        var {
+            font-size: .9rem
+        }
+
+
+        pre>code {
+            display: block;
+            margin: 4px 0;
+            overflow: auto;
+            padding: .6em
+        }
+
+        del {
+            background-color: var(--color-red)
+        }
+
+        ins {
+            background-color: var(--color-green)
+        }
+
+        mark {
+            background-color: var(--color-yellow)
+        }
+
+        kbd {
+            padding: .4em .6em;
+            font-size: .8em;
+            background-color: var(--offset-text-color);
+            box-shadow: inset -2px -2px 0 #fff, inset 2px 2px 0 #fff, inset 2px -2px 0 #fff, inset -2px 2px 0 #fff;
+            border: 1px solid var(--color-darker-grey);
+            border-bottom: 2px solid var(--color-darker-grey)
+        }
+
+        blockquote {
+            margin-left: 1em
+        }
+
+        p {
+            line-height: 1.4em;
+            font-size: var(--font-size)
+        }
+
+        blockquote footer {
+            margin: 1em 0 0 1em;
+            font-size: .9em
+        }
+
+        blockquote footer::before {
+            content: 'â€” '
+        }
+
+        hr {
+            border: 1px solid var(--color-text)
+        }
+
+        details p {
+            /* border-left: var(--border-width) solid var(--color-dark-grey); */
+            padding-left: 1em
+        }
+
+        aside {
+            padding: .6em 1em;
+            background-color: var(--color-tertiary);
+            border-radius: 4px
+        }
+
+        aside p {
+            margin: 0
+        }
+
+        .flex {
+            justify-content: center;
+            align-items: center;
+            flex-flow: column
+        }
+
+        .card {
+            border: var(--border-width) solid var(--color-dark-grey);
+            padding: 1em;
+            border-radius: 4px
+        }
+
+
+        @media (prefers-color-scheme:dark) {
+            :root {
+                --color-primary: #5783c4;
+                --color-secondary: #263342;
+                --color-tertiary: #161f28;
+                --color-background: #091118;
+                --color-text: #cbcbcb;
+                --color-secondary-dark: #263342;
+                --color-border: #0c0c0c;
+                --color-grey: #1e2431;
+                --color-dark-grey: #262b33;
+                --color-darker-grey: #5d6c7e;
+                --color-green: #28492e;
+                --color-red: #672f2f;
+                --color-yellow: #5b4e18
+            }
+
+            kbd {
+                background-color: var(--color-dark-grey);
+                box-shadow: inset -2px -2px 0 var(--color-grey), inset 2px 2px 0 var(--color-grey), inset 2px -2px 0 var(--color-grey), inset -2px 2px 0 var(--color-grey);
+                border-color: var(--color-border);
+                color: var(--color-text)
+            }
+
+            select {
+                background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" fill="none" viewBox="0 0 24 24"><path stroke="%23cbcbcb" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 11-3 3-3-3"/></svg>') !important
+            }
+        }
+
+        #descripcion,
+        aside {
+            margin: 30px auto;
+        }
+
+        fieldset {
+            padding: 10px
+        }
+
+        input {
+            margin: 15px auto;
+        }
+
+        #transcripcion-reiniciar {
+            margin: 10px 0;
+        }
+
+        .oculto {
+            display: none;
+        }
+    </style>
+    <script>
+        (function (a, b) { if ("function" == typeof define && define.amd) define([], b); else if ("undefined" != typeof exports) b(); else { b(), a.FileSaver = { exports: {} }.exports } })(this, function () { "use strict"; function b(a, b) { return "undefined" == typeof b ? b = { autoBom: !1 } : "object" != typeof b && (console.warn("Deprecated: Expected third argument to be a object"), b = { autoBom: !b }), b.autoBom && /^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(a.type) ? new Blob(["\uFEFF", a], { type: a.type }) : a } function c(a, b, c) { var d = new XMLHttpRequest; d.open("GET", a), d.responseType = "blob", d.onload = function () { g(d.response, b, c) }, d.onerror = function () { console.error("could not download file") }, d.send() } function d(a) { var b = new XMLHttpRequest; b.open("HEAD", a, !1); try { b.send() } catch (a) { } return 200 <= b.status && 299 >= b.status } function e(a) { try { a.dispatchEvent(new MouseEvent("click")) } catch (c) { var b = document.createEvent("MouseEvents"); b.initMouseEvent("click", !0, !0, window, 0, 0, 0, 80, 20, !1, !1, !1, !1, 0, null), a.dispatchEvent(b) } } var f = "object" == typeof window && window.window === window ? window : "object" == typeof self && self.self === self ? self : "object" == typeof global && global.global === global ? global : void 0, a = /Macintosh/.test(navigator.userAgent) && /AppleWebKit/.test(navigator.userAgent) && !/Safari/.test(navigator.userAgent), g = f.saveAs || ("object" != typeof window || window !== f ? function () { } : "download" in HTMLAnchorElement.prototype && !a ? function (b, g, h) { var i = f.URL || f.webkitURL, j = document.createElement("a"); g = g || b.name || "download", j.download = g, j.rel = "noopener", "string" == typeof b ? (j.href = b, j.origin === location.origin ? e(j) : d(j.href) ? c(b, g, h) : e(j, j.target = "_blank")) : (j.href = i.createObjectURL(b), setTimeout(function () { i.revokeObjectURL(j.href) }, 4E4), setTimeout(function () { e(j) }, 0)) } : "msSaveOrOpenBlob" in navigator ? function (f, g, h) { if (g = g || f.name || "download", "string" != typeof f) navigator.msSaveOrOpenBlob(b(f, h), g); else if (d(f)) c(f, g, h); else { var i = document.createElement("a"); i.href = f, i.target = "_blank", setTimeout(function () { e(i) }) } } : function (b, d, e, g) { if (g = g || open("", "_blank"), g && (g.document.title = g.document.body.innerText = "downloading..."), "string" == typeof b) return c(b, d, e); var h = "application/octet-stream" === b.type, i = /constructor/i.test(f.HTMLElement) || f.safari, j = /CriOS\/[\d]+/.test(navigator.userAgent); if ((j || h && i || a) && "undefined" != typeof FileReader) { var k = new FileReader; k.onloadend = function () { var a = k.result; a = j ? a : a.replace(/^data:[^;]*;/, "data:attachment/file;"), g ? g.location.href = a : location = a, g = null }, k.readAsDataURL(b) } else { var l = f.URL || f.webkitURL, m = l.createObjectURL(b); g ? g.location = m : location.href = m, g = null, setTimeout(function () { l.revokeObjectURL(m) }, 4E4) } }); f.saveAs = g.saveAs = g, "undefined" != typeof module && (module.exports = g) });
+    </script>
+</head>
+
+<body>
+    <main>
+        <h1>Buscador de contenido en <span style="color:#ff0000">Y</span>ou<span style="color: #ff0000">T</span>ube</h1>
+
+        <div class="card" id="descripcion">
+            <p>Esta aplicación web busca facilitar la realización de búsquedas de contenido en YouTube, tanto a
+                través de la transcripción del contenido como en los comentarios que aportan los usuarios.</p>
+            <details>
+                <summary>Preferencias</summary>
+                <p>La realización de estas búsquedas no son sencillas: la transcripción puede ser pobre, faltas
+                    ortográficas, uso de otros términos, etc.</p>
+                <p>Por estos motivos después de cada búsqueda se ofrece la posibilidad de obtener un archivo serializado
+                    y estructurado en el que poder disponer de los contenidos y hacer otro tipo de consultas y
+                    transformaciones. Si no te interesa obtener este archivo deshabilita la siguiente preferencia</p>
+                <p><label>
+                        <input id="preferencia-descarga" type="checkbox" checked>Quiero descargar el archivo con el
+                        contenido
+                        original
+                    </label></p>
+                <p>La búsqueda en los comentarios se hace a través de la API de <a href="https://docs.piped.video/"
+                        target="_blank">Piped</a>, "una interfaz de YouTube alternativa respetuosa con la privacidad,
+                    que es eficiente y escalable por diseño". Para su uso es necesario definir la URL base, pero existen
+                    <a href="https://github.com/TeamPiped/Piped/wiki/Instances">alternativas</a>. Puedes modificarla si
+                    así lo deseas:
+                </p>
+                <label>
+                    Piped API url base:
+                    <input id="piped-url" type="text" value="https://pipedapi.kavin.rocks">
+                </label>
+            </details>
+        </div>
+
+        <aside>
+            <details>
+                <summary>Buscador de contenido en transcripciones</summary>
+                <form id="transcripciones-form">
+                    <fieldset id="transcripciones-campos">
+                        <label>
+                            URL:
+                            <input type="text" id="transcripciones-url" required>
+                        </label>
+                        <button id="transcripciones-buscar">Buscar</button>
+                    </fieldset>
+                </form>
+
+                <form id="transcripcion-form" class="oculto">
+                    <fieldset id="transcripcion-campos">
+                        <label>
+                            Selecciona el idioma en el que buscar:
+                            <select id="transcripcion-idiomas"></select>
+                        </label>
+                        <label>
+                            Término búsqueda:
+                            <input type="text" id="transcripcion-busqueda" required>
+                        </label>
+                        <button id="transcripcion-buscar">Buscar</button>
+                    </fieldset>
+                </form>
+
+                <div id="transcripcion-resultados" class="oculto"></div>
+                <hr>
+                <button id="transcripcion-reiniciar">Reiniciar búsqueda</button>
+            </details>
+        </aside>
+
+        <aside>
+            <details>
+                <summary>Buscador de contenido en comentarios</summary>
+                <form id="comentarios-form">
+                    <fieldset id="comentarios-campos">
+                        <label>
+                            URL:
+                            <input type="text" id="comentarios-url" required>
+                        </label>
+                        <label>
+                            Término búsqueda:
+                            <input type="text" id="comentarios-busqueda" required>
+                        </label>
+
+                        <button id="comentarios-buscar">Buscar</button>
+                    </fieldset>
+                </form>
+
+                <div id="comentarios-resultados" class="oculto"></div>
+            </details>
+        </aside>
+    </main>
+    <script>
+        const cargando = `
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin:auto;display:block;" width="25px" height="25px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+            <circle cx="50" cy="50" fill="none" stroke="#2c62af" stroke-width="12" r="35" stroke-dasharray="164.93361431346415 56.97787143782138">
+                <animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="1s" values="0 50 50;360 50 50" keyTimes="0;1"></animateTransform>
+            </circle>
+        </svg>`
+
+        // DESCARGA
+        const $preferenciaDescarga = document.querySelector("#preferencia-descarga")
+        $preferenciaDescarga.checked = true
+        // PIPED
+        const $pipedUrl = document.querySelector("#piped-url")
+        $pipedUrl.value = "https://pipedapi-libre.kavin.rocks" // "https://pipedapi.kavin.rocks"
+
+        // FORM TRANSCRIPCIONES
+        const $transcripcionesForm = document.querySelector("#transcripciones-form")
+        const $transcripcionesCampos = document.querySelector("#transcripciones-campos")
+        const $transcripcionesYoutubeUrl = document.querySelector("#transcripciones-url")
+        const $transcripcionesBuscar = document.querySelector("#transcripciones-buscar")
+
+        // FORM TRANSCRIPCION
+        const $transcripcionForm = document.querySelector("#transcripcion-form")
+        const $transcripcionIdiomas = document.querySelector("#transcripcion-idiomas")
+        const $transcripcionCampos = document.querySelector("#transcripcion-campos")
+        const $transcripcionBusqueda = document.querySelector("#transcripcion-busqueda")
+        const $transcripcionBuscar = document.querySelector("#transcripcion-buscar")
+        const $transcripcionReiniciar = document.querySelector("#transcripcion-reiniciar")
+
+        // FORM COMENTARIOS
+        const $comentariosForm = document.querySelector("#comentarios-form")
+        const $comentariosCampos = document.querySelector("#comentarios-campos")
+        const $comentariosYoutubeUrl = document.querySelector("#comentarios-url")
+        const $comentariosBusqueda = document.querySelector("#comentarios-busqueda")
+        const $comentariosBuscar = document.querySelector("#comentarios-buscar")
+
+        // TRANSCRIPCIÓN resultados
+        const $transcripcionResultados = document.querySelector("#transcripcion-resultados")
+
+        // COMENTARIOS resultados
+        const $comentariosResultados = document.querySelector("#comentarios-resultados")
+
+        let transcripcionesIntercambio = []
+
+        async function solicitarTranscripciones(evento) {
+            evento.preventDefault()
+            $transcripcionesBuscar.innerHTML = cargando
+            $transcripcionesCampos.disabled = true
+
+            const solicitud = {
+                "url": $transcripcionesYoutubeUrl.value
+            }
+
+            const r = await fetch("/transcripciones", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(solicitud)
+            })
+
+            if (r.status != 200) {
+                const respuesta = await r.text()
+                alert(r)
+                $transcripcionesBuscar.innerHTML = "Buscar"
+                $transcripcionesCampos.disabled = false
+                return
+            }
+
+            transcripcionesIntercambio = await r.json()
+
+            let opciones = ""
+            for (const [i, v] of transcripcionesIntercambio.entries()) {
+                opciones += `<option value="${i}">${v.languageCode}</option>`
+            }
+            $transcripcionIdiomas.innerHTML = opciones
+
+            $transcripcionesForm.classList.add("oculto")
+            $transcripcionesBuscar.innerHTML = "Buscar"
+            $transcripcionesCampos.disabled = false
+
+            $transcripcionForm.classList.remove("oculto")
+        }
+
+        async function buscarTranscripcion(evento) {
+            evento.preventDefault()
+
+            $transcripcionCampos.disabled = true
+            $transcripcionBuscar.innerHTML = cargando
+
+            const solicitud = {
+                "url": transcripcionesIntercambio[$transcripcionIdiomas.value].baseUrl,
+                "busqueda": $transcripcionBusqueda.value
+            }
+
+            const r = await fetch("/transcripcion", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(solicitud)
+            })
+
+            if (r.status != 200) {
+                const respuesta = await r.text()
+                alert(r)
+                $transcripcionBuscar.innerHTML = "Buscar"
+                $transcripcionCampos.disabled = false
+                return
+            }
+
+            const respuesta = await r.json()
+
+            const totalCoincidencias = respuesta.coincidencias.length
+            let coincidencias = `<h3>La búsqueda de "${$transcripcionBusqueda.value}" ha devuelto ${totalCoincidencias} coincidencias</h3>`
+            if (respuesta.coincidencias.length > 0) {
+                coincidencias += `
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Contenido</th>
+                            <th>Tiempo (segundos)</th>
+                        </tr>
+                `
+
+                for (const c of respuesta.coincidencias) {
+                    coincidencias += `
+                        <tr>
+                            <td>${c["$value"]}</td>
+                            <td>${c["start"]}</td>
+                        </tr>`
+                }
+                coincidencias += `
+                    <tbody>
+                </table>               
+                `
+            }
+
+            $transcripcionResultados.innerHTML = coincidencias
+            $transcripcionBuscar.innerHTML = "Buscar"
+            $transcripcionCampos.disabled = false
+
+            $transcripcionResultados.classList.remove("oculto")
+            $transcripcionForm.classList.add("oculto")
+
+
+            if ($preferenciaDescarga.checked) {
+                var blob = new Blob([respuesta.serializacion], {
+                    type: "application/json;charset=utf-8",
+                });
+                saveAs(blob, "transcripciones.json");
+            }
+        }
+
+        function reiniciarTranscripcion() {
+            $transcripcionResultados.innerHTML = ""
+            $transcripcionBuscar.innerHTML = "Buscar"
+            $transcripcionCampos.disabled = false
+            $transcripcionBusqueda.value = ""
+            $transcripcionIdiomas.innerHTML = ""
+            $transcripcionForm.classList.add("oculto")
+
+            $transcripcionesBuscar.innerHTML = "Buscar"
+            $transcripcionesYoutubeUrl.value = ""
+            $transcripcionesCampos.disabled = false
+            $transcripcionesForm.classList.remove("oculto")
+
+        }
+
+        async function solicitarComentarios(evento) {
+            evento.preventDefault()
+
+            $comentariosCampos.disabled = true
+            $comentariosBuscar.innerHTML = cargando
+            $comentariosResultados.innerHTML = ""
+
+            const solicitud = {
+                "url": $comentariosYoutubeUrl.value,
+                "busqueda": $comentariosBusqueda.value,
+                "piped": $pipedUrl.value
+            }
+
+            const r = await fetch("/comentarios", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(solicitud)
+            })
+
+            if (r.status != 200) {
+                const respuesta = await r.text()
+                alert(respuesta)
+                $comentariosBuscar.innerHTML = "Buscar"
+                $comentariosCampos.disabled = false
+                return
+            }
+
+            const respuesta = await r.json()
+
+            let coincidencias = `<h3>La búsqueda de "${$comentariosBusqueda.value}" ha devuelto ${respuesta.coincidencias.length} coincidencias tras recuperar ${respuesta.total} comentarios</h3>`
+            if (respuesta.coincidencias.length > 0) {
+
+                coincidencias += `
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Autor</th>
+                            <th>Comentario</th>
+                            <th>Tiempo</th>
+                        </tr>
+                `
+
+                for (const c of respuesta.coincidencias) {
+                    coincidencias += `
+                        <tr>
+                            <td>${c.author}</td>
+                            <td>${c.commentText}</td>
+                            <td>${c.commentedTime}</td>
+                        </tr>`
+                }
+                coincidencias += `
+                    <tbody>
+                </table>               
+                `
+            }
+
+            $comentariosResultados.innerHTML = coincidencias
+            $comentariosBuscar.innerHTML = "Buscar"
+            $comentariosCampos.disabled = false
+            $comentariosResultados.classList.remove("oculto")
+
+            if ($preferenciaDescarga.checked) {
+                var blob = new Blob([respuesta.serializacion], {
+                    type: "application/json;charset=utf-8",
+                });
+                saveAs(blob, "comentarios.json");
+            }
+        }
+
+        $transcripcionesForm.addEventListener("submit", solicitarTranscripciones)
+        $transcripcionForm.addEventListener("submit", buscarTranscripcion)
+        $transcripcionReiniciar.addEventListener("click", reiniciarTranscripcion)
+        $comentariosForm.addEventListener("submit", solicitarComentarios)
+    </script>
+
+</body>
+
+</html>
