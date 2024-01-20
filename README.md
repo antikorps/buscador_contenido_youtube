@@ -1,7 +1,7 @@
-# buscador_contenido_youtube
-Buscar contenido en las transcripciones y los comentarios de un vídeo de YouTube
+# Buscador de contenido en YouTube
+Aplicación web para facilitar la búsqueda contenido en las transcripciones y los comentarios de un vídeo de YouTube
 
-Descarga el ejecutable desde el apartado "Releases", ejecutalo y accede a la aplicación a través de [Lhttp://localhost:8080](http://localhost:8080)
+Descarga el ejecutable desde el apartado "Releases", ejecutalo y accede a la aplicación a través de [http://localhost:8080](http://localhost:8080)
 
 Si el puerto está ocupado puedes asignar uno distinto con el argumento --port o -port
 ```bash
